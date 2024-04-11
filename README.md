@@ -5,7 +5,9 @@
 
 ### Install Edmgutil
 This tool uses `edmgutil` to create encrypted, ephemeral volumes.
-`cargo install --git https://github.com/getsentry/edmgutil --branch main edmgutil`
+```shell
+cargo install --git https://github.com/getsentry/edmgutil --branch main edmgutil
+```
 See: https://github.com/getsentry/edmgutil
 
 ### Install This Tool as Local Checkout
