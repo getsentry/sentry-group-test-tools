@@ -10,10 +10,21 @@ cargo install --git https://github.com/getsentry/edmgutil --branch main edmgutil
 ```
 See: https://github.com/getsentry/edmgutil
 
-### Install This Tool as Local Checkout
+### Install
+```shell
+cd {your sentry dir}
+direnv allow
+pip install git+https://github.com/getsentry/sentry-group-test-tools.git#egg=sentry_group_test_tools
+```
+
+
+### Install for Development
+Checkout the this repo and install it as an editable package. All changes will
+be immediatelly reflected.
 ```shell
 git clone git@github.com:getsentry/sentry-group-test-tools.git
 cd {your sentry dir}
+direnv allow
 pip install -e {this package dir}
 ```
 

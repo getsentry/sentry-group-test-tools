@@ -1,6 +1,8 @@
 [project]
 name = "sentry_group_test_tools"
 version = "2024.04.10"
+description = "Tools for tests error grouping in Sentry"
+requires-python = ">=3.11"
 license = {file = "LICENSE"}
 authors = [{name = "Bartek Ogryczak", email = "bartek.ogryczak@sentry.io"}]
 
@@ -14,5 +16,7 @@ test-grouping = "sentry_group_test_tools.cli:main"
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-packages = ["sentry_group_test_tools"]
+[tool.setuptools.packages.find]
+where = [""]
+include = ["sentry_group_test_tools*"]
+namespaces = false
