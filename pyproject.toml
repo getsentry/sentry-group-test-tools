@@ -2,12 +2,12 @@
 name = "sentry_group_test_tools"
 version = "2024.04.10"
 license = {file = "LICENSE"}
+authors = [{name = "Bartek Ogryczak", email = "bartek.ogryczak@sentry.io"}]
 
 dependencies = ["click >= 8"]
 
-
 [project.entry-points.console_scripts]
-sentry-group-test-tools = "sentry_group_test_tools.cli:main"
+test-grouping = "sentry_group_test_tools.cli:main"
 
 
 [build-system]
