@@ -24,6 +24,7 @@ MASTER = "master"
 @click.option(
     "--use-edmg/--no-edmg", help="use edmgutil as storage", type=bool, is_flag=True, default=True
 )
+@click.option("--grouping-config", help="grouping config IDs (eg. newstyle:2023_01_11)")
 def main(
     org: str,
     project: str,
@@ -33,6 +34,7 @@ def main(
     force_refetch: bool,
     force_baseline: bool,
     use_edmg: bool,
+    grouping_config: str,
 ):
     storage = Storage(limit=limit, use_edmg=use_edmg)
 
@@ -51,8 +53,8 @@ def main(
         data.read_raw_data()
 
     data.transform_data()
-    run_baseline_tests(storage, force_baseline)
-    run_new_tests(storage)
+    run_baseline_tests(storage, force_baseline, grouping_config)
+    run_new_tests(storage, grouping_config)
     compare_all(storage)
 
 def sentry_root() -> Path:
@@ -75,7 +77,7 @@ def git(command: str, splitlines: bool=False) -> str | list[str]:
     else:
         return output.strip()
 
-def run_baseline_tests(storage: Storage, force_baseline: bool) -> None:
+def run_baseline_tests(storage: Storage, force_baseline: bool, grouping_config: str| None = None) -> None:
     if not force_baseline and not storage.empty(storage.baseline_outputs_dir, glob="**/*.txt"):
         click.secho("Baseline tests already ran, skipping", fg="green", nl=False)
         click.secho(" [use --force-baseline to force refresh]", fg="yellow")
@@ -98,15 +100,15 @@ def run_baseline_tests(storage: Storage, force_baseline: bool) -> None:
 
     try:
         git(f"switch {MASTER}")
-        run_tests(storage.inputs_dir, storage.baseline_outputs_dir)
+        run_tests(storage.inputs_dir, storage.baseline_outputs_dir, grouping_config)
     finally:
         git(f"switch {BRANCH}")
         if stash_id:
             git(f"stash pop {stash_id}")
 
 
-def run_new_tests(storage: Storage) -> None:
-    run_tests(storage.inputs_dir, storage.new_outputs_dir)
+def run_new_tests(storage: Storage, grouping_config: str| None = None) -> None:
+    run_tests(storage.inputs_dir, storage.new_outputs_dir, grouping_config)
 
 @contextlib.contextmanager
 def symlinked_test_dir():
@@ -120,7 +122,7 @@ def symlinked_test_dir():
         test_link.unlink()
 
 @symlinked_test_dir()
-def run_tests(input_dir, ouput_dir):
+def run_tests(input_dir, ouput_dir, grouping_config: str| None = None):
     # calling via subprocess to avoid pytest's internal caching, which gets confused
     # by the code changing between runs
 
@@ -130,9 +132,11 @@ def run_tests(input_dir, ouput_dir):
         "pytest",
         # TODO: figure out how to have test itself oustide of the tests directory
         "tests/sentry/grouping/_test/",
-        "-k",
-        "newstyle:2023_01_11",
     ]
+
+    if grouping_config:
+        pytest_command += ["-k", f"{grouping_config}"]
+
 
     pytest_extra_parallel = [
         "-v",  # verbose, so for each passed test we have a line with "PASSED"
@@ -150,11 +154,16 @@ def run_tests(input_dir, ouput_dir):
         "GROUPING_TEST_OUTPUT_PATH": str(ouput_dir),
     }
 
-    pytest_collect = check_output(
-        pytest_command + ["-qq", "--collect-only"],
-        env=pytest_env,
-        cwd=pytest_cwd,
-    ).decode()
+    try:
+        pytest_collect = check_output(
+            pytest_command + ["-qq", "--collect-only"],
+            env=pytest_env,
+            cwd=pytest_cwd,
+        ).decode()
+    except subprocess.CalledProcessError as e:
+        click.secho("Failed to collect tests", fg="red")
+        click.echo(e.output)
+        raise
 
     n_tests = int(pytest_collect.split(":")[1].strip())
     process = subprocess.Popen(

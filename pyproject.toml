@@ -8,7 +8,7 @@ authors = [{name = "Bartek Ogryczak", email = "bartek.ogryczak@sentry.io"}]
 
 dependencies = ["click >= 8"]
 
-[project.entry-points.console_scripts]
+[project.scripts]
 test-grouping = "sentry_group_test_tools.cli:main"
 
 
