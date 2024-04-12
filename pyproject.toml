@@ -1,6 +1,6 @@
 [project]
 name = "sentry_group_test_tools"
-version = "2024.04.10"
+version = "2024.04.12"
 description = "Tools for tests error grouping in Sentry"
 requires-python = ">=3.11"
 license = {file = "LICENSE"}
