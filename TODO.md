@@ -11,7 +11,11 @@
 - [ ] sample events from multiple orgs
     - [ ] superuser API token
 
+
 ## Productionizing
-- [ ] enforce encrypted storage
-- [ ] add branch protection in repo
+- [x] enforce encrypted storage
+- [ ] tests
 - [ ] publish wheel
+- [ ] productionize repo
+    - [ ] add branch protection rule
+    - [ ] test actions
