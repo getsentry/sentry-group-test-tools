@@ -21,9 +21,6 @@ MASTER = "master"
 @click.option("--token", "-t", help="API token", default=TOKEN)
 @click.option("--force-refetch", "-f", help="force refetching data", type=bool, is_flag=True)
 @click.option("--force-baseline", help="force rerunning of baseline tests", type=bool, is_flag=True)
-@click.option(
-    "--use-edmg/--no-edmg", help="use edmgutil as storage", type=bool, is_flag=True, default=True
-)
 @click.option("--grouping-config", help="grouping config IDs (eg. newstyle:2023_01_11)")
 def main(
     org: str,
@@ -33,10 +30,9 @@ def main(
     token: str,
     force_refetch: bool,
     force_baseline: bool,
-    use_edmg: bool,
     grouping_config: str,
 ):
-    storage = Storage(limit=limit, use_edmg=use_edmg)
+    storage = Storage(limit=limit)
 
     if force_refetch:
         # this will wipe all data
