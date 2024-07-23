@@ -25,7 +25,9 @@ class Data:
         if self.issues:
             data = []
             for issue in self.issues:
-                url = f"{API_URL_BASE}/issues/{self.org}/{self.project}/{self.issue}/events/?full=true&sample=true"
+                url = f"{API_URL_BASE}/issues/{self.org}/{self.project}/{issue}/events/?full=true&sample=true"
+                url = f"{API_URL_BASE}/organizations/{self.org}/issues/{issue}/events/?full=true"
+
                 data += self.fetch_data_from_url(url)
         else:
             url = f"{API_URL_BASE}/projects/{self.org}/{self.project}/events/?full=true&sample=true"
