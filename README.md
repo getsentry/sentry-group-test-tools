@@ -1,4 +1,4 @@
-# Grouping Testing Tools (WIP)
+# Grouping Testing Tools
 
 
 ## Install
@@ -53,3 +53,10 @@ Options:
 
 For most up to data available options
 ```test-grouping --help```
+
+
+
+## More docs
+
+- [TODO](TODO.md) — list of things that need to be done to fully productionize this
+- [detailed docs](docs/index.md) — explains inner workings of the tool
