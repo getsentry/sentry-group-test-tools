@@ -155,6 +155,7 @@ def run_tests(input_dir, ouput_dir, grouping_config: str| None = None):
             pytest_command + ["-qq", "--collect-only"],
             env=pytest_env,
             cwd=pytest_cwd,
+            stderr=subprocess.PIPE,
         ).decode()
     except subprocess.CalledProcessError as e:
         click.secho("Failed to collect tests", fg="red")
@@ -167,6 +168,7 @@ def run_tests(input_dir, ouput_dir, grouping_config: str| None = None):
         env=pytest_env,
         cwd=pytest_cwd,
         stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
     )
 
     with click.progressbar(
