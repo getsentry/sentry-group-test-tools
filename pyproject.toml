@@ -10,6 +10,9 @@ authors = [
 
 dependencies = ["click >= 8"]
 
+[project.optional-dependencies]
+test = ["pytest >= 6", "pytest-cov >= 3"]
+
 [project.scripts]
 test-grouping = "sentry_group_test_tools.cli:main"
 
