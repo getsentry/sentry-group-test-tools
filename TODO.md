@@ -17,5 +17,5 @@
 - [ ] tests
 - [ ] publish wheel
 - [ ] productionize repo
-    - [ ] add branch protection rule
+    - [x] add branch protection rule
     - [ ] test actions
