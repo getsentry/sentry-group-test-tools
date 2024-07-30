@@ -4,9 +4,14 @@ version = "2024.04.12"
 description = "Tools for tests error grouping in Sentry"
 requires-python = ">=3.11"
 license = {file = "LICENSE"}
-authors = [{name = "Bartek Ogryczak", email = "bartek.ogryczak@sentry.io"}]
+authors = [
+    {name = "Sentry", email = "oss@sentry.io"},
+]
 
 dependencies = ["click >= 8"]
+
+[project.optional-dependencies]
+test = ["pytest >= 6", "pytest-cov >= 3"]
 
 [project.scripts]
 test-grouping = "sentry_group_test_tools.cli:main"
@@ -20,3 +25,8 @@ build-backend = "setuptools.build_meta"
 where = [""]
 include = ["sentry_group_test_tools*"]
 namespaces = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v"
+
